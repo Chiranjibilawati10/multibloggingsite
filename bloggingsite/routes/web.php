@@ -11,12 +11,21 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Blogscontroller@index');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/blogs', 'Blogscontroller@index');
-Route::get('blogs/create', 'Blogscontroller@create');
+Route::get('/blogs', 'Blogscontroller@index')->name('blogs');
+Route::get('blogs/create', 'Blogscontroller@create')->name('blogs.create');
+Route::post('blogs/store', 'Blogscontroller@store')->name('blogs.store');
+
+//keep trash routes
+Route::get('/blogs/trash', 'Blogscontroller@trash')->name('blogs.trash');
+Route::get('/blogs/trash/{id}/restore', 'Blogscontroller@restore')->name('blogs.restore');
+Route::delete('/blogs/trash/{id}/permanent-delete', 'Blogscontroller@permanentDelete')->name('blogs.permanent-delete');
+
+
+Route::get('/blogs/{id}', 'BlogsController@show')->name('blogs.show');
+Route::get('/blogs/{id}/edit', 'BlogsController@edit')->name('blogs.edit');
+Route::patch('/blogs/{id}/update', 'BlogsController@update')->name('blogs.update');
+Route::delete('/blogs/{id}/delete', 'BlogsController@delete')->name('blogs.delete');
