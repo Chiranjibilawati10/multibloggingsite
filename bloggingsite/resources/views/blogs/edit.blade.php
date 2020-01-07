@@ -19,7 +19,25 @@
                     <textarea name="body" class="form-control">{{ $blog->body }}</textarea>
                 </div>
 
-                <button class="btn btn-primary" type="submit">Update a blog</button>
+                <div class="form-group form-check form-check-inline">
+                {{ $blog->category->count() ? 'Current category :  ' : '' }} &nbsp;
+                    @foreach($blog->category as $category)
+                        <input type="checkbox" value="{{ $category->id }}" name="category_id[]" class="form-check-input" checked>
+                        <label class="form-check-label btn-margin-right">{{ $category->name  }}</label>
+                    @endforeach
+                </div>
+
+                <div class="form-group form-check form-check-inline">
+                {{ $filtered->count() ? 'Unused categories :  ' : '' }} &nbsp;
+                    @foreach($filtered as $category)
+                        <input type="checkbox" value="{{ $category->id }}" name="category_id[]" class="form-check-input" >
+                        <label class="form-check-label btn-margin-right">{{ $category->name  }}</label>
+                    @endforeach
+                </div>
+
+                <div>
+                    <button class="btn btn-primary" type="submit">Update a blog</button> 
+                </div>
                 {{ csrf_field() }}
             </form>
         </div>
