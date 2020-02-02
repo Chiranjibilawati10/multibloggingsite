@@ -21,6 +21,19 @@ class BlogsController extends Controller
     public function store(Request $request){
 
         $input = $request->all();
+        //meta stuff
+        $input['slug'] = str_slug($request->title);
+        $input['meta_title'] = str_limit($request->title, 55);
+        $input['meta_description'] = str_limit($request->body, 155);
+        //image upload
+        if ($file = $request->file('featured_image'))
+        {
+            //getting image file original name
+            $name = uniqid() .$file->getClientOriginalName();
+            //storing in the given folder name
+            $file->move('images/featured_image/', $name);
+            $input['featured_image'] = $name;
+        }
         $blog = Blog::create($input);
         // one way to store data
         // $blog = new Blog();
@@ -49,12 +62,10 @@ class BlogsController extends Controller
         $blog = Blog::findOrFail($id);
 
         $bc = array();
-        foreach ($blog->category as $category) {
-            $bc[] = $category->id;
+        foreach ($blog->category as $c ){
+            $bc[] = $c->id;
         }
-
         $filtered = array_except($categories, $bc);
-
         return view('blogs.edit', ['blog' => $blog, 'categories' => $categories, 'filtered' => $filtered]);
     }
 
